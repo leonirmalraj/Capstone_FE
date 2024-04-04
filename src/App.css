@@ -5,7 +5,7 @@
   /* Add your desktop-specific styles here */
   .home-wrapper {
       width: 100%;
-      height: 350px;
+      /* height: 350px; */
       /* background: url('https://i.imgur.com/vHHl8Xk.jpg'); */
       background-size: cover;
       background-blend-mode: difference;
@@ -13,7 +13,7 @@
   
     .carousel_image {
       width: 100%; 
-      height: 950px;
+      /* height: 950px; */
         /* background: red; */
   
     }
@@ -30,7 +30,7 @@
   /* Add your desktop-specific styles here */
     .home-wrapper {
       width: 100%;
-      height: 350px;
+      /* height: 350px; */
       /* background: url('https://i.imgur.com/vHHl8Xk.jpg'); */
       background-size: cover;
       background-blend-mode: difference;
@@ -38,7 +38,7 @@
   
     .carousel_image {
       width: 100%;
-      height: 500px;
+      /* height: 500px; */
       /* background: red; */
   
     }
@@ -54,7 +54,7 @@
   /* Add your desktop-specific styles here */
     .home-wrapper {
       width: 100%;
-      height: 350px;
+      /* height: 350px; */
       /* background: url('https://i.imgur.com/vHHl8Xk.jpg'); */
       background-size: cover;
       background-blend-mode: difference;
