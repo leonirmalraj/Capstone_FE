@@ -11,6 +11,8 @@ import AddColors from './components/AddColors';
 import './App.css';
 import SlickCarousel from './components/SlickCarousel';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import ForgotPasswordPage from './components/ForgotPassword';
+import ResetPasswordPage from './components/ResetPassword';
 
 
 function App() {
@@ -25,7 +27,9 @@ function App() {
             <Route exact path="/" element={<Home/>} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/signin" element={<SignIn/>} />
-            <Route path="/signup" element={<SignUp/>} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route path="/addcolors" element={<AddColors/>} />
             <Route path="/profile" element={<UserProfile/>} />
             <Route path="/about" element={<About />} />

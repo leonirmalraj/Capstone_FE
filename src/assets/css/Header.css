@@ -17,6 +17,11 @@
     font-size: 1.5rem;
 } */
 
+.navbar-logo {
+    margin-right: 20px;
+    /* Add space between logo and dashboard */
+}
+
 .navbar-links {
     list-style: none;
     display: flex;
