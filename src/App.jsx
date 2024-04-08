@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Header from './components/Header';
 import Home from './components/Home';
 import Dashboard from './components/Dashboard';
-import SignIn from './components/SignIn';
+// import SignIn from './components/SignIn_backup';
 import SignUp from './components/SignUp';
 import UserProfile from './components/UserProfile';
 import About from './components/About';
@@ -13,6 +13,7 @@ import SlickCarousel from './components/SlickCarousel';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ForgotPasswordPage from './components/ForgotPassword';
 import ResetPasswordPage from './components/ResetPassword';
+import SignIn from './components/SignIn';
 
 
 function App() {
@@ -24,9 +25,9 @@ function App() {
         <BrowserRouter>
           <Header />
           <Routes>
-            <Route exact path="/" element={<Home/>} />
+            <Route exact path="/" element={<Home />} />
+            <Route path="/signin" element={<SignIn />} />          
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/signin" element={<SignIn/>} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
             <Route path="/reset-password" element={<ResetPasswordPage />} />
@@ -34,6 +35,7 @@ function App() {
             <Route path="/profile" element={<UserProfile/>} />
             <Route path="/about" element={<About />} />
             <Route path="/slick" element={<SlickCarousel />} />
+            {/* <Route path="/login" element={<Login />} /> */}
           </Routes>
           
         </BrowserRouter>
