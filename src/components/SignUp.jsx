@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import AxiosService from "../utils/ApiService";
+import AxiosService from "../common/ApiService";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Formik, Field, Form, ErrorMessage } from "formik";
@@ -15,6 +15,7 @@ import Box from "@mui/material/Box";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import CircularProgress from "@mui/material/CircularProgress";
+import "../assets/css/Login.css";
 
 const lightTheme = createTheme({
   palette: {
@@ -72,119 +73,132 @@ const SignUp = () => {
   };
 
   return (
-    <ThemeProvider theme={lightTheme}>
-      <CssBaseline />
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={handleSignup}
-      >
-        <Form>
-          <Box
-            component='div'
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              height: "100vh",
-              "& .MuiTextField-root": {
-                m: 1,
-                width: "25ch",
-                marginBottom: "20px",
-              },
-              "& .required": {
-                color: lightTheme.palette.error.main,
-              },
-            }}
-            noValidate
-            autoComplete='off'
-          >
-            <h2 style={{ marginBottom: "20px" }}>Signup</h2>
-            <div>
-              <Field
-                name='firstName'
-                type='text'
-                as={TextField}
-                label='First Name'
-                variant='outlined'
-                className='required'
-              />
-              <ErrorMessage
-                name='firstName'
-                component='div'
-                className='required'
-              />
-            </div>
-            <div>
-              <Field
-                name='lastName'
-                type='text'
-                as={TextField}
-                label='Last Name'
-                variant='outlined'
-                className='required'
-              />
-              <ErrorMessage
-                name='lastName'
-                component='div'
-                className='required'
-              />
-            </div>
-            <div>
-              <Field
-                name='email'
-                type='text'
-                as={TextField}
-                label='Email'
-                variant='outlined'
-                className='required'
-              />
-              <ErrorMessage name='email' component='div' className='required' />
-            </div>
-            <div>
-              <Field
-                name='password'
-                type={showPassword ? "text" : "password"}
-                as={TextField}
-                label='Password'
-                variant='outlined'
-                className='required'
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position='end'>
-                      <IconButton
-                        onClick={() => setShowPassword(!showPassword)}
-                        edge='end'
-                      >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-              <ErrorMessage
-                name='password'
-                component='div'
-                className='required'
-              />
-            </div>
-            <Button
-              color='primary'
-              variant='contained'
-              type='submit'
-              style={{ marginTop: "20px" }}
-              disabled={loading}
+    <div className="cus-container">
+      <div className="form-box">
+        <div className="header-form">
+          <h4 className="text-primary text-center">
+            <i className="fa fa-user-circle" style={{ fontSize: "110px" }}></i>
+          </h4>
+          <div className="image"></div>
+        </div>
+        <div className="body-form">
+          <ThemeProvider theme={lightTheme}>
+            <CssBaseline />
+            <Formik
+              initialValues={initialValues}
+              validationSchema={validationSchema}
+              onSubmit={handleSignup}
             >
-              {loading ? <CircularProgress size={24} /> : "Signup"}
-            </Button>
-            <p style={{ marginTop: "20px" }}>
-              Already have an account? <Link to='/signin'>Signin</Link>
-            </p>
-          </Box>
-        </Form>
-      </Formik>
-    </ThemeProvider>
+              <Form>
+
+                <div className="input-group mb-3" >
+                  <div className="input-group-prepend">
+                    <span className="input-group-text">
+                      <i className="fa fa-user"></i>
+                    </span>
+                  </div>
+                  <Field
+                    name='firstName'
+                    type='text'
+                    as={TextField}
+                    label='First Name'
+                    variant='outlined'
+                    className='form-control required'
+                  />
+                  <ErrorMessage
+                    name='firstName'
+                    component='div'
+                    className='required'
+                  />
+                </div>
+                <div className="input-group mb-3" >
+                  <div className="input-group-prepend">
+                    <span className="input-group-text">
+                      <i className="fa fa-user"></i>
+                    </span>
+                  </div>
+                  <Field
+                    name='lastName'
+                    type='text'
+                    as={TextField}
+                    label='Last Name'
+                    variant='outlined'
+                    className='form-control required'
+                  />
+                  <ErrorMessage
+                    name='lastName'
+                    component='div'
+                    className='required'
+                  />
+                </div>
+                <div className="input-group mb-3">
+                  <div className="input-group-prepend">
+                    <span className="input-group-text">
+                      <i className="fa fa-envelope"></i>
+                    </span>
+                  </div>
+                  <Field
+                    name='email'
+                    type='text'
+                    as={TextField}
+                    label='Email'
+                    variant='outlined'
+                    className='form-control required'
+                  />
+                  <ErrorMessage name='email' component='div' className='required' />
+                </div>
+                <div className="input-group mb-3">
+                  <div className="input-group-prepend">
+                    <span className="input-group-text">
+                      <i className="fa fa-lock"></i>
+                    </span>
+                  </div>
+                  <Field
+                    name='password'
+                    type={showPassword ? "text" : "password"}
+                    as={TextField}
+                    label='Password'
+                    variant='outlined'
+                    className='form-control required'
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position='end'>
+                          <IconButton
+                            onClick={() => setShowPassword(!showPassword)}
+                            edge='end'
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                  <ErrorMessage
+                    name='password'
+                    component='div'
+                    className='required'
+                  />
+                </div>
+                <Button
+                  color='primary'
+                  variant='contained'
+                  type='submit'
+                  style={{ marginTop: "20px" }}
+                  disabled={loading}
+                >
+                  {loading ? <CircularProgress size={24} /> : "Signup"}
+                </Button>
+                <p style={{ marginTop: "20px" }}>
+                  Already have an account? <Link to='/signin'>Signin</Link>
+                </p>
+
+              </Form>
+            </Formik>
+          </ThemeProvider>
+        </div>
+
+      </div>
+    </div>
   );
 }
 
