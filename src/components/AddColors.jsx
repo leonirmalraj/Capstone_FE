@@ -46,7 +46,7 @@ const AddColors = () => {
 
   const fetchData = async () => {
     try {
-      const res = await AxiosService.get(`/login/${id}`);
+      const res = await AxiosService.get(`/user/signin/${id}`);
 
       setSelectedDressColors(res.data.user.dresscolor);
       setSelectedShoeColors(res.data.user.shoecolor);
@@ -157,7 +157,7 @@ const AddColors = () => {
       const watchcolor = selectedWatchColors;
       const bagcolor = selectedBagColors;
 
-      let res = await AxiosService.put(`/login/${id}`, {
+      let res = await AxiosService.put(`/user/signin/${id}`, {
         dresscolor,
         shoecolor,
         watchcolor,

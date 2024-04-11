@@ -1,28 +1,26 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import { NavDropdown } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import useLogout from '../common/useLogout';
-import AxiosService from "../common/ApiService";
-
+import AxiosService from '../common/ApiService';
 
 function Dashboard() {
-  let navigate = useNavigate()
-  let logout = useLogout()
-  let id = sessionStorage.getItem('id');
+  const id = sessionStorage.getItem('id');
   const [userData, setUserData] = useState(null);
-  const reversedColors = userData && userData.recentColors ? [...userData.recentColors].reverse() : [];
+  const [reversedColors, setReversedColors] = useState([]);
+  const [reversedWatchColors, setReversedWatchColors] = useState([]);
 
   const fetchData = async () => {
     try {
-      const res = await AxiosService.get(`/login/${id}`);
-
+      const res = await AxiosService.get(`/user/signin/${id}`);
       setUserData(res.data.user);
 
+      // Update reversedColors array with recent dress colors
+      const reversedColors = res.data.user && res.data.user.recentColors ? [...res.data.user.recentColors].reverse() : [];
+      setReversedColors(reversedColors);
+
+      // Update reversedWatchColors array with recent watch colors
+      const reversedWatchColors = res.data.user && res.data.user.recentWatchColors ? [...res.data.user.recentWatchColors].reverse() : [];
+      setReversedWatchColors(reversedWatchColors);
     } catch (error) {
       console.error(error);
     }
@@ -32,30 +30,28 @@ function Dashboard() {
     fetchData();
   }, []);
 
-  const suggestcolor = async () => {
+  const suggestColor = async () => {
     try {
-      const res = await AxiosService.put(`/suggestcolor/${id}`);
-      console.log("suggest:", res)
-
-      useEffect(() => {
-        fetchData();
-      }, []);
-
+      const res = await AxiosService.put(`/user/suggest-color/${id}`);
+      console.log("suggest-color:", res);
+      fetchData();
     } catch (error) {
       console.error(error);
     }
   };
-  let add = async () => {
-    try {
-      navigate('/userdetail')
 
+  const suggestWatchColor = async () => {
+    try {
+      const res = await AxiosService.put(`/user/suggest-watch-color/${id}`);
+      console.log("suggest-watch-color:", res);
+      fetchData();
     } catch (error) {
-      toast.error(error.response.data.message)
+      console.error(error);
     }
-  }
-  return <>
+  };
+
+  return (
     <div className='dash1'>
-   
       <div className="container c1">
         {userData && (
           <table className="table" style={{ backgroundColor: 'rgba(208, 26, 26, 0.105)', backdropFilter: 'blur(10px)' }}>
@@ -157,31 +153,62 @@ function Dashboard() {
         )}
       </div>
 
+      <div className="container c1">
+        {userData && (
+          <table className="table" style={{ backgroundColor: 'rgba(208, 26, 26, 0.105)', backdropFilter: 'blur(10px)' }}>
+            <thead>
+              <tr className='tbn'>
+                <th colSpan={reversedWatchColors.length + 1}>Last 1 Week Watch Color Suggestions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className='tbn'>
+                <th scope="row" style={{ width: '100px' }}>Day</th> {/* Adjust width as needed */}
+                {reversedWatchColors.map((_, index) => (
+                  <td key={index}>{index + 1}</td>
+                ))}
+              </tr>
+              <tr className='tbn'>
+                <th scope="row">Color</th>
+                {reversedWatchColors.map((color, index) => (
+                  <td style={{ color: `${color}` }} key={index}>{color}</td>
+                ))}
+              </tr>
+            </tbody>
+          </table>
+        )}
+      </div>
 
       <div className="form-box1">
         <div className="container">
-
-          <Form className="input-group d-flex flex-column" >
+          <Form className="input-group d-flex flex-column">
             <div className="d-flex flex-column no-wrap text-center pt-3">
-              <div>
+              {/* <div>
                 {userData && (
                   <>
-                    <span style={{ color: 'white' }} >Today's dress color suggestion is</span>
+                    <span >Today's dress color suggestion is</span>
+                    &nbsp; &nbsp; &nbsp;
+                    <span className='color' id="suggest" style={{ backgroundColor: `${userData.value}` }} ></span>&nbsp; &nbsp;
+                    <span style={{ color: `${userData.value}` }}>{userData.value}</span>
+                    <span >Today's dress color suggestion is</span>
                     &nbsp; &nbsp; &nbsp;
                     <span className='color' id="suggest" style={{ backgroundColor: `${userData.value}` }} ></span>&nbsp; &nbsp;
                     <span style={{ color: `${userData.value}` }}>{userData.value}</span>
                   </>
                 )}
+              </div> */}
+              <div>
+                <Button type="button" className="suggest-btn" onClick={suggestColor}>Suggest Dress Color</Button>
               </div>
               <div>
-                <Button type="submit" className="suggest-btn" onClick={() => suggestcolor()}>Suggest Color</Button>
+                <Button type="button" className="suggest-btn" onClick={suggestWatchColor}>Suggest Watch Color</Button>
               </div>
             </div>
           </Form>
         </div>
       </div>
     </div>
-  </>
+  );
 }
 
-export default Dashboard
+export default Dashboard;

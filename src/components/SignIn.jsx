@@ -56,16 +56,19 @@ const Signin = () => {
         try {
             setLoading(true);
             const response = await AxiosService.post("/user/signin", values);
-            console.log("Response.", response);
-            console.log(response.data);
+           
+            
 
             const { message, token, userData } = response.data;
-
+            const user_id = response.data.userData._id;
+            
             if (message) {
                 console.log("inside If block")
                 toast.success(message);
                 sessionStorage.setItem("token", token);
                 sessionStorage.setItem("userData", JSON.stringify(userData));
+                sessionStorage.setItem("id", user_id);
+                
                 navigate("/dashboard");
             }
         } catch (error) {
