@@ -16,7 +16,8 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import CircularProgress from "@mui/material/CircularProgress";
 import "../assets/css/Login.css";
-
+import '../assets/css/Header.css';
+import { NavLink } from 'react-router-dom';
 const lightTheme = createTheme({
   palette: {
     mode: "light",
@@ -73,6 +74,17 @@ const SignUp = () => {
   };
 
   return (
+     <>
+      <nav className="navbar">
+        <div className="navbar-container">
+          <ul className="navbar-links">
+          </ul>
+        </div>
+        <ul className="navbar-links">
+          <li><NavLink to="/signin" activeClassName="active">Sign In</NavLink></li>
+          <li><NavLink to="/signup" activeClassName="active">Sign Up</NavLink></li>
+        </ul>
+      </nav>
     <div className="cus-container">
       <div className="form-box">
         <div className="header-form">
@@ -198,7 +210,8 @@ const SignUp = () => {
         </div>
 
       </div>
-    </div>
+      </div>
+      </>
   );
 }
 

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Form } from 'react-bootstrap';
-import Container from 'react-bootstrap/Container';
 import AxiosService from '../common/ApiService';
 
 function Dashboard() {
@@ -8,6 +7,8 @@ function Dashboard() {
   const [userData, setUserData] = useState(null);
   const [reversedColors, setReversedColors] = useState([]);
   const [reversedWatchColors, setReversedWatchColors] = useState([]);
+  const [reversedBagColors, setReversedBagColors] = useState([]);
+  const [reversedShoeColors, setReversedShoeColors] = useState([]);
 
   const fetchData = async () => {
     try {
@@ -21,6 +22,14 @@ function Dashboard() {
       // Update reversedWatchColors array with recent watch colors
       const reversedWatchColors = res.data.user && res.data.user.recentWatchColors ? [...res.data.user.recentWatchColors].reverse() : [];
       setReversedWatchColors(reversedWatchColors);
+
+      // Update reversedBagColors array with recent bag colors
+      const reversedBagColors = res.data.user && res.data.user.recentBagColors ? [...res.data.user.recentBagColors].reverse() : [];
+      setReversedBagColors(reversedBagColors);
+
+      // Update reversedShoeColors array with recent shoe colors
+      const reversedShoeColors = res.data.user && res.data.user.recentShoeColors ? [...res.data.user.recentShoeColors].reverse() : [];
+      setReversedShoeColors(reversedShoeColors);
     } catch (error) {
       console.error(error);
     }
@@ -48,6 +57,34 @@ function Dashboard() {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const suggestShoeColor = async () => {
+    try {
+      const res = await AxiosService.put(`/user/suggest-shoe-color/${id}`);
+      console.log("suggest-shoe-color:", res);
+      fetchData();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const suggestBagColor = async () => {
+    try {
+      const res = await AxiosService.put(`/user/suggest-bag-color/${id}`);
+      console.log("suggest-bag-color:", res);
+      fetchData();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Define a new function to call all color suggestion functions
+  const handleButtonClick = () => {
+    suggestColor();
+    suggestWatchColor();
+    suggestBagColor();
+    suggestShoeColor();
   };
 
   return (
@@ -179,29 +216,66 @@ function Dashboard() {
         )}
       </div>
 
+      {/* Last 1 Week Bag Color Suggestions Table */}
+      <div className="container c1">
+        {userData && (
+          <table className="table" style={{ backgroundColor: 'rgba(208, 26, 26, 0.105)', backdropFilter: 'blur(10px)' }}>
+            <thead>
+              <tr className='tbn'>
+                <th colSpan={reversedBagColors.length + 1}>Last 1 Week Bag Color Suggestions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className='tbn'>
+                <th scope="row" style={{ width: '100px' }}>Day</th> {/* Adjust width as needed */}
+                {reversedBagColors.map((_, index) => (
+                  <td key={index}>{index + 1}</td>
+                ))}
+              </tr>
+              <tr className='tbn'>
+                <th scope="row">Color</th>
+                {reversedBagColors.map((color, index) => (
+                  <td style={{ color: `${color}` }} key={index}>{color}</td>
+                ))}
+              </tr>
+            </tbody>
+          </table>
+        )}
+      </div>
+
+      {/* Last 1 Week Shoe Color Suggestions Table */}
+      <div className="container c1">
+        {userData && (
+          <table className="table" style={{ backgroundColor: 'rgba(208, 26, 26, 0.105)', backdropFilter: 'blur(10px)' }}>
+            <thead>
+              <tr className='tbn'>
+                <th colSpan={reversedShoeColors.length + 1}>Last 1 Week Shoe Color Suggestions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className='tbn'>
+                <th scope="row" style={{ width: '100px' }}>Day</th> {/* Adjust width as needed */}
+                {reversedShoeColors.map((_, index) => (
+                  <td key={index}>{index + 1}</td>
+                ))}
+              </tr>
+              <tr className='tbn'>
+                <th scope="row">Color</th>
+                {reversedShoeColors.map((color, index) => (
+                  <td style={{ color: `${color}` }} key={index}>{color}</td>
+                ))}
+              </tr>
+            </tbody>
+          </table>
+        )}
+      </div>
+
       <div className="form-box1">
         <div className="container">
           <Form className="input-group d-flex flex-column">
             <div className="d-flex flex-column no-wrap text-center pt-3">
-              {/* <div>
-                {userData && (
-                  <>
-                    <span >Today's dress color suggestion is</span>
-                    &nbsp; &nbsp; &nbsp;
-                    <span className='color' id="suggest" style={{ backgroundColor: `${userData.value}` }} ></span>&nbsp; &nbsp;
-                    <span style={{ color: `${userData.value}` }}>{userData.value}</span>
-                    <span >Today's dress color suggestion is</span>
-                    &nbsp; &nbsp; &nbsp;
-                    <span className='color' id="suggest" style={{ backgroundColor: `${userData.value}` }} ></span>&nbsp; &nbsp;
-                    <span style={{ color: `${userData.value}` }}>{userData.value}</span>
-                  </>
-                )}
-              </div> */}
               <div>
-                <Button type="button" className="suggest-btn" onClick={suggestColor}>Suggest Dress Color</Button>
-              </div>
-              <div>
-                <Button type="button" className="suggest-btn" onClick={suggestWatchColor}>Suggest Watch Color</Button>
+                <Button type="button" className="suggest-btn" onClick={handleButtonClick}>Suggest Color</Button>
               </div>
             </div>
           </Form>

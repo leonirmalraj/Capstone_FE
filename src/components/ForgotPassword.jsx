@@ -8,7 +8,8 @@ import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-
+import '../assets/css/Header.css';
+import { NavLink } from 'react-router-dom';
 const lightTheme = createTheme({
     palette: {
         mode: "light",
@@ -61,6 +62,17 @@ const ForgotPasswordPage = () => {
     };
 
     return (
+         <>
+            <nav className="navbar">
+                <div className="navbar-container">
+                    <ul className="navbar-links">
+                    </ul>
+                </div>
+                <ul className="navbar-links">
+                    <li><NavLink to="/signin" activeClassName="active">Sign In</NavLink></li>
+                    <li><NavLink to="/signup" activeClassName="active">Sign Up</NavLink></li>
+                </ul>
+            </nav>
         <ThemeProvider theme={lightTheme}>
             <CssBaseline />
             <Box
@@ -109,7 +121,8 @@ const ForgotPasswordPage = () => {
                     Don't have an account? <Link to='/signup'>Signup</Link>
                 </p>
             </Box>
-        </ThemeProvider>
+            </ThemeProvider>
+            </>
     );
 };
 
