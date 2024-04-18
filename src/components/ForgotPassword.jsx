@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import AxiosService from "../common/ApiService";
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { CiMail, CiCircleChevLeft } from "react-icons/ci";
 import { toast } from "react-toastify";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -8,122 +9,160 @@ import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import '../assets/css/Header.css';
-import { NavLink } from 'react-router-dom';
+import "../assets/css/header.css";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import "../assets/css/login.css";
+
 const lightTheme = createTheme({
-    palette: {
-        mode: "light",
-        primary: {
-            main: "#1976d2",
-        },
-        secondary: {
-            main: "#f50057",
-        },
-        error: {
-            main: "#f44336",
-        },
+  palette: {
+    mode: "light",
+    primary: {
+      main: "#1976d2",
     },
+    secondary: {
+      main: "#f50057",
+    },
+    error: {
+      main: "#f44336",
+    },
+  },
 });
 
 const ForgotPasswordPage = () => {
-    const navigate = useNavigate();
-    const [email, setEmail] = useState("");
-    const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
-    const handleEmailChange = (e) => {
-        setEmail(e.target.value);
-    };
+  const initialValues = {
+    email: "",
+  };
 
-    const handleForgotPassword = async () => {
-        try {
-            setLoading(true);
+  const validationSchema = Yup.object({
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email Required"),
+  });
+  const handleGoBack = () => {
+    navigate(-1); // Go back to previous page
+  };
+  const handleForgotPassword = async (values) => {
+    try {
+      setLoading(true);
+      const response = await AxiosService.post("/user/forgot-password", values);
+      if (response.data.message) {
+        toast.success(response.data.message);
+      }
+      navigate("/");
+    } catch (error) {
+      console.error(error.response.data);
+      if (error.response.data.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Failed to send password reset email. Please try again.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
-            const response = await AxiosService.post("/user/forgot-password", {
-                email,
-            });
-            console.log(response.data);
-
-            if (response.data.message) {
-                toast.success(response.data.message);
-            }
-
-            navigate("/");
-        } catch (error) {
-            console.error(error.response.data);
-
-            if (error.response.data.message) {
-                toast.error(error.response.data.message);
-            } else {
-                toast.error("Failed to send password reset email. Please try again.");
-            }
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    return (
-         <>
-            <nav className="navbar">
-                <div className="navbar-container">
-                    <ul className="navbar-links">
-                    </ul>
-                </div>
-                <ul className="navbar-links">
-                    <li><NavLink to="/signin" activeClassName="active">Sign In</NavLink></li>
-                    <li><NavLink to="/signup" activeClassName="active">Sign Up</NavLink></li>
-                </ul>
-            </nav>
-        <ThemeProvider theme={lightTheme}>
+  return (
+    <>
+      <div className="cus-container light_set">
+        <div className="form-box">
+          <div className="back_to" onClick={handleGoBack}>
+            <span className="goto"><CiCircleChevLeft className="go_back" /></span>
+          </div>
+          <ThemeProvider theme={lightTheme}>
             <CssBaseline />
             <Box
-                component='form'
-                sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    height: "100vh",
-                    "& .MuiTextField-root": {
-                        m: 1,
-                        width: "25ch",
-                        marginBottom: "20px",
-                    },
-                }}
-                noValidate
-                autoComplete='off'
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "100vh",
+                "& .MuiTextField-root": {
+                  m: 1,
+                  width: "25ch",
+                  marginBottom: "20px",
+                },
+              }}
             >
-                <h2 style={{ marginBottom: "20px" }}>Forgot Password</h2>
-                <p style={{ textAlign: "center" }}>
-                    Enter your email address to receive a password reset link.
-                </p>
-                <div>
-                    <TextField
-                        label='Email'
-                        variant='outlined'
-                        name='email'
-                        onChange={handleEmailChange}
-                    />
-                </div>
-                <Button
-                    color='primary'
-                    variant='contained'
-                    onClick={handleForgotPassword}
-                    style={{ marginTop: "20px" }}
-                    disabled={loading}
-                >
-                    {loading ? <CircularProgress size={24} /> : "Reset Password"}
-                </Button>
+              <div className="sign_in">
+                <p className="signin">Forgot Password</p>
+              </div>
 
-                <p style={{ marginTop: "20px" }}>
-                    Remember your password? <Link to='/signin'>Sign in</Link>
+              <div className="sign_in">
+                <p className="sign_para">
+                  Enter your email address to receive a password reset link.
                 </p>
-                <p>
-                    Don't have an account? <Link to='/signup'>Signup</Link>
-                </p>
+              </div>
+
+              <Formik
+                initialValues={initialValues}
+                validationSchema={validationSchema}
+                onSubmit={handleForgotPassword}
+              >
+                {({ isSubmitting }) => (
+                  <Form>
+                    <div className="one_type">
+                      <div className="one_div">
+                        <CiMail className="font_set" />
+                        <Field
+                          type="email"
+                          name="email"                          
+                          variant="outlined"
+                          label="Email ID"
+                          className="input_cloud"
+                        />
+                      </div>
+                      <div className="error">
+                        <ErrorMessage
+                          name="email"
+                          component="div"
+                          className="required"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="button_div">
+                      <Button
+                        className="login_btn"
+                        color="primary"
+                        variant="contained"
+                        type="submit"
+                        disabled={loading || isSubmitting}
+                      >
+                        {loading ? <CircularProgress size={24} /> : "Reset Password"}
+                      </Button>
+                    </div>
+                  </Form>
+                )}
+              </Formik>
+
+              <div className="message">
+                <div className="forgot_pass">
+                  Remember your password? &nbsp;
+                  <NavLink to="/signin" className="register_para">
+                    Sign in
+                  </NavLink>
+                </div>
+              </div>
+
+              <div className="message_set">
+                <div className="forgot_pass">
+                  Don't have an account? &nbsp;
+                  <NavLink to="/signup" className="register_para">
+                    SignUp
+                  </NavLink>
+                </div>
+              </div>
             </Box>
-            </ThemeProvider>
-            </>
-    );
+          </ThemeProvider>
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default ForgotPasswordPage;
